@@ -1,0 +1,26 @@
+{
+  "ccc": {
+    "username": "ccc",
+    "role": "admin",
+    "active": true,
+    "create_time": 1640770261.995962,
+    "update_time": 1640770261.995962,
+    "gifts": []
+  },
+  "dewei": {
+    "username": "dewei",
+    "role": "admin",
+    "active": true,
+    "create_time": 1640770268.064962,
+    "update_time": 1640770268.064962,
+    "gifts": []
+  },
+  "ccx": {
+    "username": "ccx",
+    "role": "admin",
+    "active": true,
+    "create_time": 1641285418.1697714,
+    "update_time": 1641285418.1697714,
+    "gifts": []
+  }
+}
