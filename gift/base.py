@@ -35,7 +35,7 @@ class Base(object):
         user['create_time']=time.time()
         user['update_time']=time.time()
         user['gifts'] = []
-        users = self.read_users()
+        users = self.__read_users()
         if user['username'] in users:
             raise UserExitError('username %s had exists ' % user['username'])
         users.update({user['username']:user})
