@@ -17,10 +17,26 @@
   },
   "ccx": {
     "username": "ccx",
-    "role": "admin",
+    "role": "normal",
     "active": true,
     "create_time": 1641285418.1697714,
     "update_time": 1641285418.1697714,
+    "gifts": []
+  },
+  "fs": {
+    "username": "fs",
+    "role": "admin",
+    "active": true,
+    "create_time": 1641438039.1298423,
+    "update_time": 1641438039.1298423,
+    "gifts": []
+  },
+  "fs1": {
+    "username": "fs1",
+    "role": "normal",
+    "active": true,
+    "create_time": 1641438168.3493924,
+    "update_time": 1641438168.3493924,
     "gifts": []
   }
 }

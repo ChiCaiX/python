@@ -1,9 +1,9 @@
 #coding:utf-8
 import os
 
-from gift.common.error import UserExitError, RoleError
+from gift.common.error import UserExitError, RoleError, LevelError
 from gift.common.utils import check_file,timestamp_to_date
-from gift.common.consts import ROLES
+from gift.common.consts import ROLES,FIRSTLEVELS,SECONDLEVELS
 import json,time
 
 class Base(object):
@@ -11,11 +11,19 @@ class Base(object):
         self.user_json = user_json
         self.gift_json = gift_json
         self.__check_user_json()
+        self.__init_gifts()
 
     def __check_user_json(self):
        check_file(self.user_json)
     def __check_gift_json(self):
        check_file(self.gift_json)
+
+       # 封装保存函数
+    def __save(self, data, path):
+        json_data = json.dumps(data)
+
+        with open(path, 'w') as f:
+            f.write(json_data)
     # 1. 读写user.json
     def __read_users(self,time_to_str =False):
         with open(self.user_json,'r',) as f :
@@ -82,7 +90,93 @@ class Base(object):
             f.write(json_users)
         return delete_user
 
+# gifts
+    def __read_gifts(self):
+        with open(self.gift_json) as f:
+            data = json.loads(f.read())
+        return data
+    # gifts 初始化
+    """
+    "level1": {
+    "level1": {
+      "HUAWEI": {
+        "name": "HUAWEI",
+        "count": 1320
+      }
+    },
+    "level2": {},
+    "level3": {}
+    }
+    """
+    def __init_gifts(self):
+        data = {
+            'level1':{
+                'level1':{},
+                'level2':{},
+                'level3':{}
+            },
+            'level2': {
+                'level1': {},
+                'level2': {},
+                'level3': {}
+            },
+            'level3': {
+                'level1': {},
+                'level2': {},
+                'level3': {}
+            },
+            'level4': {
+                'level1': {},
+                'level2': {},
+                'level3': {}
+            }
+        }
+        gifts = self.__read_gifts()
+        if len(gifts)!=0:
+            return
+        json_data = json.dumps(data)
+        with open(self.gift_json,'w') as f:
+            f.write(json_data)
+# 写入奖品
+    def write_gift(self,first_level,second_level,gift_name,gift_count):
+        if first_level not in FIRSTLEVELS:
+            raise LevelError("firstlevel not exists")
+        if second_level not in SECONDLEVELS:
+            raise LevelError("second_level not exists")
+        # 读取gifts
+        gifts = self.__read_gifts()
+        current_gift_pool = gifts[first_level]
+        current_second_gift_pool = current_gift_pool[second_level]
+        if gift_count <=0:
+            gift_count = 1
+        if gift_name in current_second_gift_pool:
+            current_second_gift_pool[gift_name]['count'] = current_second_gift_pool[gift_name]['count'] + gift_count
+        else :
+            current_second_gift_pool[gift_name]={
+                'name':gift_name,
+                'count':gift_count
+            }
+        current_gift_pool[second_level] = current_second_gift_pool
+        gifts[first_level] = current_gift_pool
+        json_data = json.dumps(gifts)
+        with open(self.gift_json,'w') as f:
+            f.write(json_data)
+        # self.__save(gifts, self.gift_json)
+# gifts 修改（数量递减）
+    def update_gift(self,first_level,second_level,gift_name,gift_count):
+        if first_level not in FIRSTLEVELS:
+            raise LevelError("firstlevel not exists")
+        if second_level not in SECONDLEVELS:
+            raise LevelError("second_level not exists")
+            # 读取gifts
+            gifts = self.__read_gifts()
+            current_gift_pool = gifts[first_level]
+            current_second_gift_pool = current_gift_pool[second_level]
+            if gift_name not in level_two :
+                return False
 
+
+# gifts 删除
 if __name__ =='__main__':
     user_path = os.path.join(os.getcwd(),'storage','user.json')
     gift_path = os.path.join(os.getcwd(),'storage','gift.json')
@@ -99,3 +193,4 @@ if __name__ =='__main__':
     # print(info)
     # user = base.read_users(time_to_str=True)
     # print(user)
+    base.write_gift(first_level='level1',second_level='level2',gift_name='iphone10',gift_count=5)

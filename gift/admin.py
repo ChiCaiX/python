@@ -8,8 +8,11 @@ admin类
 5. 修改用户身份
 """
 import os
+
 from gift.base import Base
-from gift.common.error import NotUserError,UserActiveError,RoleError
+from gift.common.error import NotUserError, UserActiveError, RoleError
+
+
 class Admin(Base):
     def __init__(self,username,user_json,gift_json):
         self.username=username
